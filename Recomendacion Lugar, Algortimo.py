@@ -13,6 +13,7 @@ class Lugar:
         self.reseñas = reseñas
 
     def distancia_a(self, otro):
+        #usa pitagoras para calcular la distancia de cada nodo
         return sqrt((self.x - otro.x)**2 + (self.y - otro.y)**2)
 
     def rating_final(self):
@@ -22,14 +23,19 @@ class Lugar:
 # Nodo inicial: el cliente
 cliente = Lugar("Cliente", "Café", 2, 2, 0, 0)
 
-# Lugares en el mapa (puedes meter más si quieres)
+# Lugares en el mapa (puedes meter más si quieres samuelito)
 lugares = [
-    Lugar("Café Aroma", "Café", 1, 1, 4.5, 200),
+    Lugar("Café Aroma", "Café", 4.4, 1.7, 4.5, 200),
     Lugar("Museo Historia", "Museo", 5, 5, 4.8, 80),
     Lugar("Bar Noche", "Bar", 3, 4, 4.1, 150),
+    Lugar("Hospital Bueno", "Hospital", 4, 1, 1, 150),
+    Lugar("Llantera don chuy", "Llantera", 2, 3, 3, 150),
     Lugar("Café Sol", "Café", 2, 1, 4.2, 80),
     Lugar("Café Luna", "Café", 0.5, 0.5, 4.7, 100),
-    Lugar("Restaurante Rico", "Restaurante", 6, 1, 4.6, 300)
+    Lugar("Tupulino", "Restaurante", 6, 2, 5, 300),
+    Lugar("Tulio", "Tienda", 0.5, 2, 3, 80),
+    Lugar("Oxxo", "Tienda", 3, 0.4, 1, 100),
+    Lugar("Restaurante Rico", "Restaurante", 6, 4, 3.5, 300)
 ]
 
 # Filtrar solo por tipo que busca el cliente
@@ -45,7 +51,7 @@ def f(lugar):
 # Obtener mejor lugar según la función f
 mejor_opcion = min(candidatos, key=f)
 
-#intefaz graficona
+#intefaz graficona (no muy importante para la logica del proyectos)
 class MapaGUI:
     def __init__(self, master):
         self.master = master
@@ -104,7 +110,7 @@ class MapaGUI:
             self.canvas.create_line(cx, cy, x, y, fill=line_color, width=line_width)
 
         # Mostrar info
-        info = f"Lugar recomendado:\n➡ {mejor.nombre}\n📍 Distancia: {cliente.distancia_a(mejor):.2f} unidades\n⭐ Rating ponderado: {mejor.rating_final():.2f}"
+        info = f"Lugar recomendado:\n➡ {mejor.nombre}\nDistancia: {cliente.distancia_a(mejor):.2f} unidades\n Rating ponderado: {mejor.rating_final():.2f}"
         self.label.config(text=info)
 
 # Mostrar mapa
