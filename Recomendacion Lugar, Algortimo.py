@@ -1,16 +1,15 @@
-import heapq
 from math import sqrt
 import tkinter as tk
 
 # Clase Lugar
 class Lugar:
-    def __init__(self, nombre, tipo, x, y, rating, reseñas):
+    def __init__(self, nombre, tipo, x, y, rating, reviews):
         self.nombre = nombre
         self.tipo = tipo
         self.x = x
         self.y = y
         self.rating = rating
-        self.reseñas = reseñas
+        self.reviews = reviews
 
     def distancia_a(self, otro):
         #usa pitagoras para calcular la distancia de cada nodo
@@ -18,7 +17,7 @@ class Lugar:
 
     def rating_final(self):
         # Normaliza el rating con la cantidad de reseñas
-        return self.rating * (1 + (self.reseñas / 100))
+        return self.rating * (1 + (self.reviews / 100))
 
 # Nodo inicial: el cliente
 cliente = Lugar("Cliente", "Café", 2, 2, 0, 0)
@@ -75,24 +74,25 @@ class MapaGUI:
 
         self.actualizar()
 
-    def escala(self, coord):
+    @staticmethod
+    def escala(coord):
         return 60 + coord * 70
 
     def actualizar(self, *args):
         self.canvas.delete("all")
-        tipo_buscado = self.tipo_var.get()
-        candidatos = [lugar for lugar in lugares if lugar.tipo == tipo_buscado]
+        searched_type = self.tipo_var.get()
+        candidates = [lugar for lugar in lugares if lugar.tipo == searched_type]
 
-        if not candidatos:
+        if not candidates:
             self.label.config(text="No hay lugares disponibles de ese tipo.")
             return
 
-        def f(lugar):
+        def eval_f(lugar):
             g = cliente.distancia_a(lugar)
             h = -lugar.rating_final()
             return g + h
 
-        mejor = min(candidatos, key=f)
+        mejor = min(candidates, key=eval_f)
 
         cx, cy = self.escala(cliente.x), self.escala(cliente.y)
         self.canvas.create_oval(cx-7, cy-7, cx+7, cy+7, fill="blue")
